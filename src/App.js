@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export default function App() {
   return (
-    <div>
+    <div className="App">
       <Counter />
     </div>
   );
@@ -11,19 +11,35 @@ export default function App() {
 function Counter() {
   const [count, setCount] = useState(0);
   const [step, setStep] = useState(1);
+
+  function handleClick() {
+    setCount(0);
+    setStep(1);
+  }
+
   const date = new Date();
   date.setDate(date.getDate() + count);
 
   return (
     <>
       <div className="step">
-        <button onClick={() => setStep((s) => s - 1)}>-</button>
-        <span>Step: {step}</span>
-        <button onClick={() => setStep((s) => s + 1)}>+</button>
+        <input
+          type="range"
+          min="1"
+          max="10"
+          value={step}
+          onChange={(e) => setStep(Number(e.target.value))}
+        />
+
+        <span>{step}</span>
       </div>
       <div className="count">
         <button onClick={() => setCount((c) => c - step)}>-</button>
-        <span>Count: {count}</span>
+        <input
+          type="text"
+          value={count}
+          onChange={(c) => setCount(Number(c.target.value))}
+        />
         <button onClick={() => setCount((c) => c + step)}>+</button>
       </div>
       <p>
@@ -36,6 +52,12 @@ function Counter() {
         </span>
         <span>{date.toDateString()}</span>
       </p>
+
+      {count !== 0 || step !== 1 ? (
+        <div>
+          <button onClick={handleClick}>Reset</button>
+        </div>
+      ) : null}
     </>
   );
 }
